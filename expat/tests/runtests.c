@@ -11619,9 +11619,11 @@ main(int argc, char *argv[]) {
   for (i = 1; i < argc; ++i) {
     char *opt = argv[i];
     if (strcmp(opt, "-v") == 0 || strcmp(opt, "--verbose") == 0)
-      verbosity = CK_VERBOSE;
+      verbosity = CK_NORMAL;
     else if (strcmp(opt, "-q") == 0 || strcmp(opt, "--quiet") == 0)
       verbosity = CK_SILENT;
+    else if (strcmp(opt, "-vv") == 0 || strcmp(opt, "--extra-verbose") == 0)
+	verbosity = CK_VERBOSE;
     else {
       fprintf(stderr, "runtests: unknown option '%s'\n", opt);
       return 2;

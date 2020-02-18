@@ -164,6 +164,8 @@ srunner_run_all(SRunner *runner, int verbosity) {
       if (tc->setup != NULL) {
         /* setup */
         if (setjmp(env)) {
+          if (verbosity >= CK_VERBOSE)
+            printf("SKIP: %s\n", _check_current_function);
           add_failure(runner, verbosity);
           continue;
         }
@@ -171,6 +173,8 @@ srunner_run_all(SRunner *runner, int verbosity) {
       }
       /* test */
       if (setjmp(env)) {
+        if (verbosity >= CK_VERBOSE)
+          printf("FAIL: %s\n", _check_current_function);
         add_failure(runner, verbosity);
         continue;
       }
@@ -178,12 +182,16 @@ srunner_run_all(SRunner *runner, int verbosity) {
 
       /* teardown */
       if (tc->teardown != NULL) {
-        if (setjmp(env)) {
+        if (setjmp(env)) { 
+          if (verbosity >= CK_VERBOSE)
+           printf("PASS: %s\n", _check_current_function);
           add_failure(runner, verbosity);
           continue;
         }
         tc->teardown();
       }
+      if (verbosity >= CK_VERBOSE)
+        printf("PASS: %s\n", _check_current_function);
     }
     tc = tc->next_tcase;
   }
